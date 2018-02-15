@@ -1,0 +1,4 @@
+def One p ?* t;
+def Two p | [p ?* [?-t]]* | t| [[? -p] ?* t]*;
+def Three ~[?* p ?* t ?*| ?* t ?* p ?*];
+def Four [[? - p]* [p t]*]*;

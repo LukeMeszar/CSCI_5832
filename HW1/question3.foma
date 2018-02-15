@@ -1,0 +1,18 @@
+read lexc able.lexc
+def Lexicon;
+
+def AbleReplacement a b l e "+" i t y -> a b i l i t y;
+
+def YReplacement y -> i e || _ "+" s    ,,
+                    y -> i   || _ "+" e d  ;
+
+def DoubleN n -> n n || _ "+" a | e | i | o | u;
+
+def DeleteVowels a | e | i | o | u -> 0 || _ "+" (a | e | i | o | u) b ;
+
+def EInsertion [..] -> e || c h _ "+" s;
+
+def Cleanup "+" -> 0;
+
+regex Lexicon .o. AbleReplacement .o. YReplacement .o. DoubleN .o. DeleteVowels .o. EInsertion .o. Cleanup;
+pairs
