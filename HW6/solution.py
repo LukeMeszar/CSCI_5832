@@ -36,7 +36,7 @@ right_vectors = [ [0]*len(unique_train_words) ]*num_words
 print(len(left_vectors), len(left_vectors[0]))
 
 print("building vectors")
-
+print(len(train_words))
 for itr in range(len(train_words)):
     word  = train_words[itr]
     left  = train_words[itr-1]
