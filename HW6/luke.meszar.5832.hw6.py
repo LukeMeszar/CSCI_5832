@@ -24,8 +24,10 @@ def get_top_1000(words):
     return [x[0] for x in top_tuple]
 
 def create_left_right_vecs(words, unique_words, top_words):
-    left_vec  = [ [0]*len(unique_words) ]*len(top_words)
-    right_vec = [ [0]*len(unique_words) ]*len(top_words)
+    # left_vec  = [ [0]*len(unique_words) ]*len(top_words)
+    # right_vec = [ [0]*len(unique_words) ]*len(top_words)
+    left_vec = np.zeros((len(top_words),len(unique_words)))
+    right_vec = np.zeros((len(top_words),len(unique_words)))
     print("creating vectors")
     for i in range(len(words)):
         current_word = words[i]
