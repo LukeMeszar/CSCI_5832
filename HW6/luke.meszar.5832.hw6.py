@@ -24,32 +24,40 @@ def get_top_1000(words):
     return [x[0] for x in top_tuple]
 
 def create_left_right_vecs(words, unique_words, top_words):
-    # left_vec  = [ [0]*len(unique_words) ]*len(top_words)
-    # right_vec = [ [0]*len(unique_words) ]*len(top_words)
-    left_vec = np.zeros((len(top_words),len(unique_words)))
-    right_vec = np.zeros((len(top_words),len(unique_words)))
+    right_shift = len(unique_words)
+    combined_vectors = np.zeros((len(top_words),2*len(unique_words)))
     print("creating vectors")
     for i in range(len(words)):
         current_word = words[i]
+        left_word = words[i-1]
+        right_word = words[(i+1) % len(words)]
         if current_word in top_words:
-            left_word = words[i-1]
-            right_word = words[(i+1) % len(words)]
-            left_vec[top_words.index(current_word)][unique_words.index(left_word)] += 1
-            right_vec[top_words.index(current_word)][unique_words.index(right_word)] += 1
-    combined_vectors = []
-    for i in range(len(left_vec)):
-        combined_vectors.append(left_vec[i]+right_vec[i])
+            if i % 10000 == 0:
+                print(i)
+            combined_vectors[top_words.index(current_word)][unique_words.index(left_word)] += 1
+            combined_vectors[top_words.index(current_word)][unique_words.index(right_word)+right_shift] += 1
     return combined_vectors
 
-def normalize_and_fit(vectors):
+def normalize_and_fit(vectors, k):
     print("normalizing")
     normalized_vectors = normalize(np.array(vectors), axis=1, norm='l1')
     print("kmeans")
-    kmeans = KMeans(n_clusters=25, random_state=0).fit(normalized_vectors)
-    print(kmeans.labels_)
+    kmeans = KMeans(n_clusters=k, random_state=0).fit(normalized_vectors)
+    return kmeans.labels_
+
+def print_labels(labels, top_words, k):
+    clusters = []
+    for i in range(0, k):
+        clusters.append("Cluster" + str(i)+": ")
+    for i in range(0, len(labels)):
+        clusters[labels[i]] += top_words[i] + " "
+    for i in range(0, k):
+        print(clusters[i])
 
 if __name__ == '__main__':
+    k=25
     words, unique_words = parse_text()
     top_words = get_top_1000(words)
     vectors = create_left_right_vecs(words, unique_words, top_words)
-    normalize_and_fit(vectors)
+    labels = normalize_and_fit(vectors,k)
+    print_labels(labels, top_words, k)
